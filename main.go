@@ -27,7 +27,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: homePage")
 }
 
-func returnSingleArticle(w http.ResponseWriter, r *http.Request) {
+func returnSingleScheduler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["id"]
 	for _, job := range Jobs {
@@ -37,7 +37,7 @@ func returnSingleArticle(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func createNewArticle(w http.ResponseWriter, r *http.Request) {
+func createNewScheduler(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	var job Schedulerjob
 	json.Unmarshal(reqBody, &job)
@@ -45,7 +45,7 @@ func createNewArticle(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(job)
 }
 
-func deleteArticle(w http.ResponseWriter, r *http.Request) {
+func deleteScheduler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	for index, job := range Jobs {
@@ -79,9 +79,9 @@ func handleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/schedulers", returnAllSchedulerJobs)
-	myRouter.HandleFunc("/scheduler", createNewArticle).Methods("POST")
-	myRouter.HandleFunc("/scheduler/{id}", deleteArticle).Methods("DELETE")
-	myRouter.HandleFunc("/scheduler/{id}", returnSingleArticle)
+	myRouter.HandleFunc("/scheduler", createNewScheduler).Methods("POST")
+	myRouter.HandleFunc("/scheduler/{id}", deleteScheduler).Methods("DELETE")
+	myRouter.HandleFunc("/scheduler/{id}", returnSingleScheduler)
 	log.Fatal(http.ListenAndServe(":10000", myRouter))
 }
 
